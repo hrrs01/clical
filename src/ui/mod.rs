@@ -2,7 +2,7 @@ use crate::app::App;
 use anyhow::Result;
 use crossterm::{
     cursor::SetCursorStyle,
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
+    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
@@ -98,6 +98,9 @@ fn run_app<B: Backend + Write>(terminal: &mut Terminal<B>, app: App) -> Result<(
         let keybindings = &app.borrow().settings.keybindings.clone();
 
         if let Event::Key(key) = event::read()? {
+            if key.kind != KeyEventKind::Press {
+                continue;
+            }
             let code = key.code;
             match current_page {
                 UIPage::AllTasks => match code {

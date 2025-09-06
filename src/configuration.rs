@@ -421,11 +421,11 @@ impl SettingsBuilder {
                     fs::create_dir_all(path)?;
                 }
 
-                let todo_dir = config_dir.join("todui");
-                if !todo_dir.exists() {
-                    fs::create_dir_all(&todo_dir)?;
+                let clical_dir = config_dir.join("clical");
+                if !clical_dir.exists() {
+                    fs::create_dir_all(&clical_dir)?;
                 }
-                Ok(todo_dir)
+                Ok(clical_dir)
             }
             None => Err(anyhow!("Could not find home directory")),
         }

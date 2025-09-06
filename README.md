@@ -52,15 +52,15 @@ $ clical ls --format json --date-filter today
 
 Use rusts package manger to install clical.
 
+Currently clical is not publicly available from cargo. However, it can be installed locally by cloning this repo, and running
 ```
-cargo install clical
+cargo install --path .
 ```
-
 ## Dependencies
 
 This tool doesn't have any mandatory dependencies. However, it looks much better if you install [Nerd Fonts](https://www.nerdfonts.com/) for better icons. If you don't want to do so, you can always use your own icons or change them for plain text, like `[ ]` for an incomplete task and `[x]` for a complete task.
 
-## [Documentation](https://github.com/danimelchor/clical/blob/main/DOCUMENTATION.md)
+## [Documentation](https://github.com/hrrs01/clical/blob/main/DOCUMENTATION.md)
 
 ## Config
 

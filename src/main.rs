@@ -1,5 +1,5 @@
-use todui::configuration::get_configuration;
-use todui::{app::App, cli, ui};
+use clical::configuration::get_configuration;
+use clical::{app::App, cli, ui};
 
 fn main() {
     // Check args, if none, run ui, else run cli

@@ -133,6 +133,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "clical"
+version = "0.1.5"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "crossterm 0.29.0",
+ "ctrlc",
+ "dirs",
+ "itertools 0.10.5",
+ "open",
+ "ratatui",
+ "serde",
+ "serde_json",
+ "unicode-width 0.1.10",
+]
+
+[[package]]
 name = "codespan-reporting"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1032,24 +1050,6 @@ dependencies = [
  "libc",
  "wasi 0.10.0+wasi-snapshot-preview1",
  "winapi",
-]
-
-[[package]]
-name = "todui"
-version = "0.1.5"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "crossterm 0.29.0",
- "ctrlc",
- "dirs",
- "itertools 0.10.5",
- "open",
- "ratatui",
- "serde",
- "serde_json",
- "unicode-width 0.1.10",
 ]
 
 [[package]]

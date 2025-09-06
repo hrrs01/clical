@@ -1,10 +1,10 @@
 [package]
-name = "todui"
+name = "clical"
 version = "0.1.5"
 edition = "2021"
-authors = ["Daniel M. <dmh672@gmail.com>"]
-description = "A CLI and TUI for your todos"
-repository = "https://github.com/danimelchor/todui"
+authors = ["Daniel M. <dmh672@gmail.com>", "Håvard N. <haavard.hn@gmail.com>"]
+description = "A CLI and TUI for your todos and calendars"
+repository = "https://github.com/hrrs01/clical"
 license = "MIT"
 
 [dependencies]

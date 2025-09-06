@@ -1,9 +1,4 @@
-# todui
-
-## TUI
-
-https://user-images.githubusercontent.com/24496843/225743483-2cbbcdda-9957-4c01-b9c1-aed1fc0ecb19.mp4
-
+# clical
 
 ## Features
 
@@ -15,15 +10,23 @@ This app allows for almost anythig you would need when dealing with todos:
 - Add notes to tasks
 - Add tasks to groups (e.g. work, personal, etc.)
 
+## Upcoming features
+
+ - ICal integration
+ - Calendar view in your terminal
+ - Calendar events to tasks
+ - Autocomplete and shortcuts for group management when creating notes
+ - Hopefully a method of syncing notes across different machines (with the likes of Syncthing or something similar)
+
 ## How to use?
 
-You can run the TUI by executing `todui` anywhere in your terminal. To use the CLI, you can start by running `todui --help`:
+You can run the TUI by executing `clical` anywhere in your terminal. To use the CLI, you can start by running `clical --help`:
 
 ```
-$ todui --help
+$ clical --help
 A CLI and TUI for your todos
 
-Usage: todui <COMMAND>
+Usage: clical <COMMAND>
 
 Commands:
   ls        Lists all the tasks
@@ -41,52 +44,52 @@ Options:
 For example:
 
 ```
-$ todui ls --format json --date-filter today     
+$ clical ls --format json --date-filter today     
 [{"id":108,"name":"LF112 Homework","date":"2023-03-16T23:59:59-04:00","repeats":{"DaysOfWeek":["Sunday","Tuesday","Thursday"]},"group":"School","description":null,"url":"https://google.com","complete":false},{"id":114,"name":"LF112 Async Thursday","date":"2023-03-16T23:59:59-04:00","repeats":"Weekly","group":"School","description":null,"url":"https://google.com","complete":false},{"id":107,"name":"EN221 Recitation","date":"2023-03-16T23:59:59-04:00","repeats":{"DaysOfWeek":["Tuesday","Thursday"]},"group":"School","description":null,"url":"https://google.com","complete":false}]
 ```
 
 ## Installation
 
-Use rusts package manger to install todui.
+Use rusts package manger to install clical.
 
 ```
-cargo install todui
+cargo install clical
 ```
 
 ## Dependencies
 
 This tool doesn't have any mandatory dependencies. However, it looks much better if you install [Nerd Fonts](https://www.nerdfonts.com/) for better icons. If you don't want to do so, you can always use your own icons or change them for plain text, like `[ ]` for an incomplete task and `[x]` for a complete task.
 
-## [Documentation](https://github.com/danimelchor/todui/blob/main/DOCUMENTATION.md)
+## [Documentation](https://github.com/danimelchor/clical/blob/main/DOCUMENTATION.md)
 
 ## Config
 
 The config file can be found in:
-- Unix: `~/.config/todui/settings.json`
-- Windows: `C:\Users\<user>\AppData\Roaming\todui\settings.json`
+- Unix: `~/.config/clical/settings.json`
+- Windows: `C:\Users\<user>\AppData\Roaming\clical\settings.json`
 
 There are some pre-built commands you can run to change the configuration. For example, you can change the keybindings to `vi` mode by running:
 
 ```
-todui config --mode vi
+clical config --mode vi
 ```
 
 You can also enable special icons by running:
 
 ```
-todui config --icons special
+clical config --icons special
 ```
 
 For all the configuration options, run:
 
 ```
-todui config help
+clical config help
 ```
 
 Optionally, you can change the default configuration by editing the files directly. The default config is the following:
 
 ```
-todui config --show
+clical config --show
 ```
 
 ```json
@@ -131,8 +134,6 @@ todui config --show
 }
 ```
 
-For more options, head to [the documentation](https://github.com/danimelchor/todui/blob/main/DOCUMENTATION.md)
-
 ## Key Bindings
 
 All key bindings can be modified in the config file. The defaults have been chosen to mimic vim movements as best as possible. Feel free to modify them to your liking!
@@ -174,9 +175,9 @@ This panel has two modes (similar to vim). When you are in insert mode, you can 
 | -------- | ---------- |
 | `Esc` | Exit insert mode / go back to normal mode |
 
-## Why the CLI?
+## Why create a derivative work of todui?
 
-CLI access to your todos introduces a programmatic way to modify or display your todos in comfortable places. For developers, this might mean displaying your todos when you open your terminal, as notifications, or even or your menu bar. For me, the menu bar was what drove me to create this project. I have used the app Cron for a bit and loved being able to see my events for that day without opening anything. So I created my own SketchyBar widget to interact with my todos:
-
-https://user-images.githubusercontent.com/24496843/225197941-0dc04074-58d7-496e-a65d-692220fea809.mov
+Because the original app seems to be mostly focused on notes only. I (hrrs01) want to be able to check calendar events quickly from my terminal as well, and create todos based on that.
+I also want to have a productivity app which i can safely connect my work email and/or calendar into, without being afraid of sharing my data with third parties.
+And jokingly, because all developers need to create their own productivity app somewhere in their career. 
 

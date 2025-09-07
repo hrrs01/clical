@@ -13,6 +13,8 @@ This app allows for almost anythig you would need when dealing with todos:
 ## Upcoming features
 
  - ICal integration
+ - Google Calendar integration
+ - A Settings page
  - Calendar view in your terminal
  - Calendar events to tasks
  - Autocomplete and shortcuts for group management when creating notes
@@ -180,4 +182,3 @@ This panel has two modes (similar to vim). When you are in insert mode, you can 
 Because the original app seems to be mostly focused on notes only. I (hrrs01) want to be able to check calendar events quickly from my terminal as well, and create todos based on that.
 I also want to have a productivity app which i can safely connect my work email and/or calendar into, without being afraid of sharing my data with third parties.
 And jokingly, because all developers need to create their own productivity app somewhere in their career. 
-

@@ -1,13 +1,13 @@
 use tui::{
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Style, Styled},
-    widgets::{Block, BorderType, Borders},
+    widgets::{Block, BorderType, Borders, Paragraph, Widget},
     Frame,
 };
 
 use crate::{
     app::{App, Id},
-    calendar::Calendar,
+    calendar::{self, Calendar},
     configuration::KeyBindings,
     day_of_week::DayOfWeek,
     key,
@@ -15,14 +15,18 @@ use crate::{
 };
 use std::{cell::RefCell, rc::Rc};
 
-pub struct CalendarPage {
+pub struct ListCalendarPage {
     pub app: Rc<RefCell<App>>,
+    pub available_calendars: Vec<String>,
 }
 
-impl CalendarPage {
-    pub fn new(app: Rc<RefCell<App>>) -> CalendarPage {
-
-        CalendarPage { app }
+impl ListCalendarPage {
+    pub fn new(app: Rc<RefCell<App>>) -> ListCalendarPage {
+        let available_calendars: Vec<String> = app.borrow().calendar.load_calendars();
+        ListCalendarPage {
+            app,
+            available_calendars,
+        }
     }
 
     pub fn get_primary_color(&self) -> Color {
@@ -38,16 +42,17 @@ impl CalendarPage {
     }
 }
 
-impl Page for CalendarPage {
+impl Page for ListCalendarPage {
     fn ui(&self, f: &mut Frame, area: Rect, focused: bool) {
+
         let overall_chunks = Layout::default()
             .direction(Direction::Vertical)
             .margin(1)
             .constraints([Constraint::Length(2), Constraint::Fill(1)].as_ref())
             .split(area);
 
-        let calendar_chunks = Layout::default()
-            .direction(Direction::Horizontal)
+        let calendar_list = Layout::default()
+            .direction(Direction::Vertical)
             .constraints(
                 [
                     Constraint::Ratio(1, 7),
@@ -72,18 +77,14 @@ impl Page for CalendarPage {
         };
         let block = Block::default()
             .borders(Borders::ALL)
-            .title("Calendar")
+            .title("Available Calendars")
             .border_style(border_style)
             .border_type(border_type);
         f.render_widget(block, area);
 
-        for (weekday, i) in self.app.borrow().calendar.get_weekdays().iter().zip(0..7) {
-            let weekday_block = Block::default()
-                .borders(Borders::ALL)
-                .title(weekday.to_string().set_style(Style::reset()))
-                .border_style(self.get_accent_color())
-                .border_type(border_type);
-            f.render_widget(weekday_block, calendar_chunks[i]);
+        for (i, calendar) in self.available_calendars.iter().enumerate() {
+            let paragraph = Paragraph::new(format!(" {}. {}", i + 1, calendar));
+            f.render_widget(paragraph, calendar_list[i]);
         }
     }
 }

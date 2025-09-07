@@ -19,10 +19,12 @@ mod all_tasks_page;
 mod delete_task_page;
 mod task_page;
 mod calendar_page;
+mod list_calendars_page;
 
 use all_tasks_page::AllTasksPage;
 use delete_task_page::DeleteTaskPage;
 use task_page::TaskPage;
+use list_calendars_page::ListCalendarPage;
 
 #[macro_export]
 macro_rules! key {
@@ -67,7 +69,8 @@ pub enum UIPage {
     NewTask,
     EditTask,
     DeleteTask,
-    Calendar
+    Calendar,
+    ListCalendars,
 }
 
 #[derive(Eq, PartialEq)]
@@ -86,6 +89,7 @@ fn run_app<B: Backend + Write>(terminal: &mut Terminal<B>, app: App) -> Result<(
     let mut task_page = TaskPage::new(Rc::clone(&app));
     let mut current_page = UIPage::AllTasks;
     let mut calendar_page = CalendarPage::new(Rc::clone(&app));
+    let mut list_calendars_page = ListCalendarPage::new(Rc::clone(&app));
     let mut delete_task_page = None;
 
     loop {
@@ -96,6 +100,7 @@ fn run_app<B: Backend + Write>(terminal: &mut Terminal<B>, app: App) -> Result<(
                 &mut task_page,
                 &mut delete_task_page,
                 &mut calendar_page,
+                &mut list_calendars_page,
                 &current_page,
             )
         })?;
@@ -246,6 +251,22 @@ fn run_app<B: Backend + Write>(terminal: &mut Terminal<B>, app: App) -> Result<(
                         _ if code == keybindings.go_back => {
                             current_page = UIPage::AllTasks;
                             set_cursor(terminal, SetCursorStyle::SteadyBlock)?;
+                        },
+                        _ if code == keybindings.list_calendars => {
+                            current_page = UIPage::ListCalendars;
+                            set_cursor(terminal, SetCursorStyle::SteadyBlock)?;
+
+                        },
+                        _ => {}
+                    }
+                },
+                UIPage::ListCalendars => {
+                    // Placeholder for future list calendars page input handling
+                    match key.code {
+                        _ if code == keybindings.quit => break,
+                        _ if code == keybindings.go_back => {
+                            current_page = UIPage::Calendar;
+                            set_cursor(terminal, SetCursorStyle::SteadyBlock)?;
                         }
                         _ => {}
                     }
@@ -263,11 +284,15 @@ fn render_app(
     task_page: &mut TaskPage,
     delete_task_page: &mut Option<DeleteTaskPage>,
     calendar_page: &mut CalendarPage,
+    list_calendars_page: &mut ListCalendarPage,
     current_page: &UIPage,
 ) {
     let constraints = match (current_page, all_tasks_page.current_id) {
         (UIPage::AllTasks | UIPage::EditTask, Some(_)) => {
             [Constraint::Percentage(50), Constraint::Percentage(50)].as_ref()
+        }
+        (UIPage::ListCalendars, _) => {
+            [Constraint::Percentage(80), Constraint::Percentage(20)].as_ref()
         }
         _ => [Constraint::Percentage(100)].as_ref(),
     };
@@ -285,6 +310,10 @@ fn render_app(
         }
         UIPage::Calendar => {
             calendar_page.ui(f, chunks[0], true);
+        },
+        UIPage::ListCalendars => {
+            calendar_page.ui(f, chunks[0], true);
+            list_calendars_page.ui(f, chunks[1], true);
         }
         _ => match all_tasks_page.current_id {
             Some(_) => {

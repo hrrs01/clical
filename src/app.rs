@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
+    calendar::{self, Calendar},
     configuration::{get_db_file, Settings},
     task::Task,
     utils,
@@ -10,6 +11,7 @@ pub type Id = usize;
 
 pub struct App {
     pub tasks: HashMap<Id, Task>,
+    pub calendar: Calendar,
     pub settings: Settings,
     pub current_id: usize,
 }
@@ -17,9 +19,22 @@ pub struct App {
 impl App {
     pub fn new(settings: Settings) -> App {
         let tasks: HashMap<Id, Task> = utils::load_tasks(get_db_file());
+        let mut google_calendar = None;
+        match &settings.google_calendar {
+            Some(config) => {
+                google_calendar = Some(crate::google::GoogleCalendar::new(
+                    config.client_id.clone(),
+                    config.client_secret.clone(),
+                    config.redirect_uri.clone(),
+                ));
+            }
+            _ => {}
+        }
+        let calendar = Calendar::new(google_calendar, settings.monday_start);
         let current_id = tasks.iter().map(|(&k, _)| k).max().unwrap_or(0);
         App {
             tasks,
+            calendar,
             settings,
             current_id,
         }
@@ -45,7 +60,7 @@ impl App {
                 t.id = Some(new_id);
                 self.tasks.insert(new_id, t);
                 new_id
-            },
+            }
         };
         self.save_state();
         new_id

@@ -222,6 +222,8 @@ pub struct KeyBindings {
     pub prev_group: KeyCode,
     #[serde(deserialize_with = "deserialize_key", serialize_with = "serialize_key")]
     pub calendar_page: KeyCode,
+    #[serde(deserialize_with = "deserialize_key", serialize_with = "serialize_key")]
+    pub list_calendars: KeyCode,
 }
 
 impl KeyBindings {
@@ -277,6 +279,7 @@ impl KeyBindings {
             next_group: KeyCode::Char('l'),
             prev_group: KeyCode::Char('h'),
             calendar_page: KeyCode::Char('c'),
+            list_calendars: KeyCode::Char('l'),
         }
     }
 }
@@ -300,6 +303,7 @@ impl Default for KeyBindings {
             next_group: KeyCode::Right,
             prev_group: KeyCode::Left,
             calendar_page: KeyCode::Char('c'),
+            list_calendars: KeyCode::Char('l'),
         }
     }
 }
@@ -357,6 +361,13 @@ impl Colors {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct GoogleCalendarConfig {
+    pub client_id: String,
+    pub client_secret: String,
+    pub redirect_uri: String,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Settings {
     pub date_formats: DateFormats,
     pub show_complete: bool,
@@ -364,6 +375,8 @@ pub struct Settings {
     pub icons: Icons,
     pub colors: Colors,
     pub keybindings: KeyBindings,
+    pub google_calendar: Option<GoogleCalendarConfig>,
+    pub monday_start: bool,
 }
 
 impl Settings {
@@ -412,6 +425,8 @@ pub struct SettingsBuilder {
     pub icons: Icons,
     pub colors: Colors,
     pub keybindings: KeyBindings,
+    pub google_calendar: Option<GoogleCalendarConfig>,
+    pub monday_start: bool,
 }
 
 impl SettingsBuilder {
@@ -472,6 +487,8 @@ impl SettingsBuilder {
             icons: self.icons.clone(),
             colors: self.colors.clone(),
             keybindings: self.keybindings.clone(),
+            monday_start: true,
+            google_calendar: self.google_calendar.clone(),
         }
     }
 }
@@ -485,6 +502,8 @@ impl Default for SettingsBuilder {
             date_formats: DateFormats::new(),
             colors: Colors::default(),
             keybindings: KeyBindings::default(),
+            google_calendar: None,
+            monday_start: true,
         }
     }
 }

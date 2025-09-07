@@ -40,6 +40,18 @@ impl DayOfWeek {
             chrono::Weekday::Sun => Self::Sunday,
         }
     }
+
+    pub fn to_string(&self) -> String {
+        match self {
+            DayOfWeek::Monday => "Mon".to_string(),
+            DayOfWeek::Tuesday => "Tue".to_string(),
+            DayOfWeek::Wednesday => "Wed".to_string(),
+            DayOfWeek::Thursday => "Thu".to_string(),
+            DayOfWeek::Friday => "Fri".to_string(),
+            DayOfWeek::Saturday => "Sat".to_string(),
+            DayOfWeek::Sunday => "Sun".to_string(),
+        }
+    }
 }
 
 impl FromStr for DayOfWeek {

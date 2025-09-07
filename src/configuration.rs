@@ -220,6 +220,8 @@ pub struct KeyBindings {
     pub next_group: KeyCode,
     #[serde(deserialize_with = "deserialize_key", serialize_with = "serialize_key")]
     pub prev_group: KeyCode,
+    #[serde(deserialize_with = "deserialize_key", serialize_with = "serialize_key")]
+    pub calendar_page: KeyCode,
 }
 
 impl KeyBindings {
@@ -263,7 +265,7 @@ impl KeyBindings {
             down: KeyCode::Char('j'),
             up: KeyCode::Char('k'),
             complete_task: KeyCode::Char(' '),
-            toggle_completed_tasks: KeyCode::Char('c'),
+            toggle_completed_tasks: KeyCode::Char('x'),
             delete_task: KeyCode::Char('d'),
             new_task: KeyCode::Char('n'),
             edit_task: KeyCode::Char('e'),
@@ -274,6 +276,7 @@ impl KeyBindings {
             open_link: KeyCode::Enter,
             next_group: KeyCode::Char('l'),
             prev_group: KeyCode::Char('h'),
+            calendar_page: KeyCode::Char('c'),
         }
     }
 }
@@ -296,6 +299,7 @@ impl Default for KeyBindings {
             open_link: KeyCode::Enter,
             next_group: KeyCode::Right,
             prev_group: KeyCode::Left,
+            calendar_page: KeyCode::Char('c'),
         }
     }
 }

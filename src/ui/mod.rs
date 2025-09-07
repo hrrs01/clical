@@ -268,6 +268,12 @@ fn run_app<B: Backend + Write>(terminal: &mut Terminal<B>, app: App) -> Result<(
                             current_page = UIPage::Calendar;
                             set_cursor(terminal, SetCursorStyle::SteadyBlock)?;
                         }
+                        _ if code == keybindings.up => {
+                            list_calendars_page.move_up();
+                        }
+                        _ if code == keybindings.down => {
+                            list_calendars_page.move_down();
+                        }
                         _ => {}
                     }
                 }

@@ -31,7 +31,7 @@ impl Calendar {
         if let Some(google_calendar) = &self.google_calendar {
             google_calendar.load_calendars()
         } else {
-            vec!["No Google Calendar Configured".to_string()]
+            vec!["No Google Calendar Configured".to_string(), "Please either set up Google Calendar".to_string(), "or use a different calendar backend (e.g. ical).".to_string()]
         }
     }
 }

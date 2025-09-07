@@ -1,6 +1,6 @@
 use tui::{
     layout::{Constraint, Direction, Layout, Rect},
-    style::{Color, Style, Styled},
+    style::{Color, Style, Styled, Stylize},
     widgets::{Block, BorderType, Borders, Paragraph, Widget},
     Frame,
 };
@@ -18,6 +18,7 @@ use std::{cell::RefCell, rc::Rc};
 pub struct ListCalendarPage {
     pub app: Rc<RefCell<App>>,
     pub available_calendars: Vec<String>,
+    pub selected_calendar: usize,
 }
 
 impl ListCalendarPage {
@@ -26,6 +27,7 @@ impl ListCalendarPage {
         ListCalendarPage {
             app,
             available_calendars,
+            selected_calendar: 0,
         }
     }
 
@@ -39,6 +41,18 @@ impl ListCalendarPage {
 
     pub fn get_accent_color(&self) -> Color {
         self.app.borrow().settings.colors.accent_color
+    }
+
+    pub fn move_up(&mut self) {
+        if self.selected_calendar > 0 {
+            self.selected_calendar -= 1;
+        }
+    }
+
+    pub fn move_down(&mut self) {
+        if self.selected_calendar < self.available_calendars.len() - 1 {
+            self.selected_calendar += 1;
+        }
     }
 }
 
@@ -54,16 +68,7 @@ impl Page for ListCalendarPage {
         let calendar_list = Layout::default()
             .direction(Direction::Vertical)
             .constraints(
-                [
-                    Constraint::Ratio(1, 7),
-                    Constraint::Ratio(1, 7),
-                    Constraint::Ratio(1, 7),
-                    Constraint::Ratio(1, 7),
-                    Constraint::Ratio(1, 7),
-                    Constraint::Ratio(1, 7),
-                    Constraint::Ratio(1, 7),
-                ]
-                .as_ref(),
+                &Constraint::from_lengths(vec![1; self.available_calendars.len()])
             )
             .split(overall_chunks[1]);
         // Draw border around area
@@ -83,8 +88,14 @@ impl Page for ListCalendarPage {
         f.render_widget(block, area);
 
         for (i, calendar) in self.available_calendars.iter().enumerate() {
-            let paragraph = Paragraph::new(format!(" {}. {}", i + 1, calendar));
-            f.render_widget(paragraph, calendar_list[i]);
+            if i == self.selected_calendar {
+                let paragraph = Paragraph::new(format!(">{}. {}", i + 1, calendar))
+                    .style(Style::default().fg(self.get_accent_color())).bg(Color::DarkGray);
+                f.render_widget(paragraph, calendar_list[i]);
+            } else {
+                let paragraph = Paragraph::new(format!(" {}. {}", i + 1, calendar));
+                f.render_widget(paragraph, calendar_list[i]);
+            }
         }
     }
 }

@@ -18,15 +18,17 @@ use std::{cell::RefCell, rc::Rc};
 pub struct ListCalendarPage {
     pub app: Rc<RefCell<App>>,
     pub available_calendars: Vec<String>,
+    pub calendars_loaded: bool,
     pub selected_calendar: usize,
 }
 
 impl ListCalendarPage {
     pub fn new(app: Rc<RefCell<App>>) -> ListCalendarPage {
-        let available_calendars: Vec<String> = app.borrow().calendar.load_calendars();
+        let available_calendars = app.borrow().calendar.get_calendar_list();
         ListCalendarPage {
             app,
             available_calendars,
+            calendars_loaded: false,
             selected_calendar: 0,
         }
     }

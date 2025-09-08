@@ -235,6 +235,7 @@ dependencies = [
  "ratatui",
  "serde",
  "serde_json",
+ "tokio",
  "unicode-width 0.1.10",
 ]
 

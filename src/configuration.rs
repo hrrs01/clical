@@ -362,6 +362,7 @@ impl Colors {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct GoogleCalendarConfig {
+    pub enabled: bool,
     pub client_id: String,
     pub client_secret: String,
     pub redirect_uri: String,
@@ -375,7 +376,7 @@ pub struct Settings {
     pub icons: Icons,
     pub colors: Colors,
     pub keybindings: KeyBindings,
-    pub google_calendar: Option<GoogleCalendarConfig>,
+    pub google_calendar: GoogleCalendarConfig,
     pub monday_start: bool,
 }
 
@@ -425,7 +426,7 @@ pub struct SettingsBuilder {
     pub icons: Icons,
     pub colors: Colors,
     pub keybindings: KeyBindings,
-    pub google_calendar: Option<GoogleCalendarConfig>,
+    pub google_calendar: GoogleCalendarConfig,
     pub monday_start: bool,
 }
 
@@ -502,7 +503,12 @@ impl Default for SettingsBuilder {
             date_formats: DateFormats::new(),
             colors: Colors::default(),
             keybindings: KeyBindings::default(),
-            google_calendar: None,
+            google_calendar: GoogleCalendarConfig {
+                client_id: "".to_string(),
+                client_secret: "".to_string(),
+                redirect_uri: "".to_string(),
+                enabled: false,
+            },
             monday_start: true,
         }
     }

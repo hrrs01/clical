@@ -1,8 +1,11 @@
 use std::collections::HashMap;
 
+use google_calendar::settings;
+
 use crate::{
     calendar::{self, Calendar},
     configuration::{get_db_file, Settings},
+    google::GoogleCalendar,
     task::Task,
     utils,
 };
@@ -20,15 +23,12 @@ impl App {
     pub fn new(settings: Settings) -> App {
         let tasks: HashMap<Id, Task> = utils::load_tasks(get_db_file());
         let mut google_calendar = None;
-        match &settings.google_calendar {
-            Some(config) => {
-                google_calendar = Some(crate::google::GoogleCalendar::new(
-                    config.client_id.clone(),
-                    config.client_secret.clone(),
-                    config.redirect_uri.clone(),
-                ));
-            }
-            _ => {}
+        if settings.google_calendar.enabled {
+            google_calendar = Some(GoogleCalendar::new(
+                settings.google_calendar.client_id.clone(),
+                settings.google_calendar.client_secret.clone(),
+                settings.google_calendar.redirect_uri.clone(),
+            ));
         }
         let calendar = Calendar::new(google_calendar, settings.monday_start);
         let current_id = tasks.iter().map(|(&k, _)| k).max().unwrap_or(0);
@@ -38,6 +38,14 @@ impl App {
             settings,
             current_id,
         }
+    }
+
+    pub async fn load_calendars(&mut self) {
+        self.calendar.load_calendars().await;
+    }
+
+    pub fn get_calendar_list(&mut self) {
+        self.calendar.get_calendar_list();
     }
 
     pub fn get_task(&self, id: Id) -> Option<&Task> {

@@ -27,11 +27,25 @@ impl Calendar {
         vec![]
     }
 
-    pub fn load_calendars(&self) -> Vec<String> {
+    pub fn get_google_auth_url(&self) -> Option<String> {
         if let Some(google_calendar) = &self.google_calendar {
-            google_calendar.load_calendars()
+            Some(google_calendar.get_user_consent_url())
         } else {
-            vec!["No Google Calendar Configured".to_string(), "Please either set up Google Calendar".to_string(), "or use a different calendar backend (e.g. ical).".to_string()]
+            None
+        }
+    }
+
+    pub async fn load_calendars(&mut self) {
+        if let Some(google_calendar) = &mut self.google_calendar {
+            google_calendar.load_calendars().await;
+        } 
+    }
+
+    pub fn get_calendar_list(&self) -> Vec<String> {
+        if let Some(google_calendar) = &self.google_calendar {
+            google_calendar.get_calendar_list()
+        } else {
+            vec!["No Calendars Configured".to_string(), "Please configure your settings first.".to_string()]
         }
     }
 }

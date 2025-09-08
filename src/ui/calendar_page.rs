@@ -1,7 +1,7 @@
 use tui::{
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Style, Styled},
-    widgets::{Block, BorderType, Borders},
+    widgets::{Block, BorderType, Borders, Paragraph, Wrap},
     Frame,
 };
 
@@ -17,13 +17,20 @@ use std::{cell::RefCell, rc::Rc};
 
 pub struct CalendarPage {
     pub app: Rc<RefCell<App>>,
+    pub auth_url: Option<String>,
 }
 
 impl CalendarPage {
     pub fn new(app: Rc<RefCell<App>>) -> CalendarPage {
-
-        CalendarPage { app }
+        let auth_url = if app.borrow().settings.google_calendar.enabled {
+            // If Google Calendar is enabled but not set up, set it up
+            app.borrow().calendar.get_google_auth_url()
+        } else {
+            None
+        };
+        CalendarPage { app, auth_url }
     }
+
 
     pub fn get_primary_color(&self) -> Color {
         self.app.borrow().settings.colors.primary_color
@@ -43,8 +50,14 @@ impl Page for CalendarPage {
         let overall_chunks = Layout::default()
             .direction(Direction::Vertical)
             .margin(1)
-            .constraints([Constraint::Length(2), Constraint::Fill(1)].as_ref())
+            .constraints([Constraint::Length(2), Constraint::Fill(1), Constraint::Length(3)].as_ref())
             .split(area);
+
+        if let Some(auth_url) = &self.auth_url {
+            let paragraph = Paragraph::new(format!("Google Calendar Auth URL:\n{}", auth_url)).wrap(Wrap { trim: false })
+                .style(Style::default().fg(self.get_accent_color()));
+            f.render_widget(paragraph, overall_chunks[2]);
+        }
 
         let calendar_chunks = Layout::default()
             .direction(Direction::Horizontal)
@@ -75,7 +88,7 @@ impl Page for CalendarPage {
             .title("Calendar")
             .border_style(border_style)
             .border_type(border_type);
-        f.render_widget(block, area);
+        f.render_widget(block, overall_chunks[0]);
 
         for (weekday, i) in self.app.borrow().calendar.get_weekdays().iter().zip(0..7) {
             let weekday_block = Block::default()
